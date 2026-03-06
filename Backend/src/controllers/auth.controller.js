@@ -52,6 +52,8 @@ async function loginController(req, res) {
     });
   }
 
+  
+
   const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
     return res.status(400).json({
@@ -94,8 +96,25 @@ async function logoutController(req, res) {
   });
 }
 
+async function getMeController(req, res) {
+  const id = req.user.id;
+
+  if (!id) {
+    return res.status(400).json({
+      message: "Unauthorized Access",
+    });
+  }
+
+  const user = await userModel.findById(id);
+  return res.status(200).json({
+    message: "Fetched LoggedIn User",
+    user,
+  });
+}
+
 module.exports = {
   registerController,
   loginController,
   logoutController,
+  getMeController,
 };
