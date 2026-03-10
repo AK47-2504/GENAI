@@ -1,0 +1,338 @@
+
+/* ==============================
+   COLOR VARIABLES
+================================= */
+
+$bg-color: #2c2c2c;
+$accent-green: #a0d585;
+$soft-blue: #6984a9;
+$dark-blue: #263b6a;
+
+$transition: all 0.3s ease;
+
+/* ==============================
+   GLOBAL AUTH CONTAINER
+================================= */
+
+.auth-container {
+  min-height: 100vh;
+  width: 100%;
+  background: $bg-color;
+  font-family: "Poppins";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+}
+
+/* ==============================
+   CARD LAYOUT
+================================= */
+
+.auth-card {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 550px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  backdrop-filter: blur(12px);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 5px 10px rgba(0, 0, 0, 0.05);
+
+  overflow: hidden;
+
+  transition: $transition;
+}
+
+/* ==============================
+   LEFT PANEL
+================================= */
+
+.auth-left {
+  background: linear-gradient(135deg, $dark-blue, $soft-blue);
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+/* floating decorative circles */
+
+.auth-left::before,
+.auth-left::after {
+  content: "";
+  position: absolute;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.auth-left::before {
+  width: 300px;
+  height: 300px;
+
+  top: -120px;
+  right: -120px;
+}
+
+.auth-left::after {
+  width: 200px;
+  height: 200px;
+
+  bottom: -80px;
+  left: -80px;
+}
+
+/* brand text */
+
+.brand-wrapper {
+  text-align: center;
+  z-index: 2;
+}
+
+.brand-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.brand-subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* ==============================
+   RIGHT PANEL
+================================= */
+
+.auth-right {
+  padding: 60px 50px;
+  background-color: #c9e0e7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 35px;
+
+  color: $dark-blue;
+}
+
+/* ==============================
+   FORM
+================================= */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ==============================
+   INPUT GROUP
+================================= */
+
+.input-group {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 14px 14px;
+
+    border-radius: 8px;
+
+    border: 1px solid rgba(0, 0, 0, 0.15);
+
+    outline: none;
+
+    font-size: 14px;
+
+    background: transparent;
+
+    transition: $transition;
+  }
+
+  input:focus {
+    border-color: $soft-blue;
+
+    box-shadow: 0 0 0 2px rgba(105, 132, 169, 0.2);
+  }
+
+  label {
+    position: absolute;
+
+    left: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 14px;
+
+    color: #777;
+
+    pointer-events: none;
+
+    background: transparent;
+
+    padding: 0 4px;
+
+    transition: $transition;
+  }
+
+  /* floating label */
+
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    top: -8px;
+
+    background: white;
+
+    font-size: 12px;
+
+    color: $soft-blue;
+  }
+}
+
+/* ==============================
+   OPTIONS
+================================= */
+
+.auth-options {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 13px;
+
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .forgot {
+    color: $soft-blue;
+    cursor: pointer;
+
+    transition: $transition;
+  }
+
+  .forgot:hover {
+    color: $dark-blue;
+  }
+}
+
+/* ==============================
+   BUTTON
+================================= */
+
+.auth-btn {
+  margin-top: 10px;
+
+  background: $dark-blue;
+
+  color: white;
+
+  border: none;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: $transition;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+
+  background: $soft-blue;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================
+   SWITCH TEXT
+================================= */
+
+.switch-auth {
+  text-align: center;
+
+  font-size: 14px;
+
+  span {
+    margin-left: 5px;
+
+    color: $soft-blue;
+
+    cursor: pointer;
+
+    font-weight: 500;
+
+    transition: $transition;
+  }
+
+  span:hover {
+    color: $dark-blue;
+  }
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+================================= */
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-left {
+    display: none;
+  }
+
+  .auth-right {
+    padding: 50px 35px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 500px) {
+  .auth-right {
+    padding: 40px 25px;
+  }
+
+  .form-title {
+    font-size: 24px;
+  }
+
+  .brand-title {
+    font-size: 28px;
+  }
+}
