@@ -1,7 +1,22 @@
 import { Link } from "react-router";
 import "../style/auth.scss";
+import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { loading, handleLogin } = useAuth();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin({ email, password });
+  };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -20,14 +35,28 @@ const Login = () => {
         <div className="auth-right">
           <h2 className="form-title">Login</h2>
 
-          <form className="auth-form">
+          <form onSubmit={handleSubmit} className="auth-form">
             <div className="input-group">
-              <input type="email" name="email" placeholder=" " required />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                name="email"
+                placeholder=" "
+                required
+              />
               <label>Email</label>
             </div>
 
             <div className="input-group">
-              <input type="password" name="password" placeholder=" " required />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                name="password"
+                placeholder=" "
+                required
+              />
               <label>Password</label>
             </div>
 

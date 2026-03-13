@@ -1,7 +1,24 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "../style/auth.scss";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const { loading, handleRegister } = useAuth();
+  const handleRegiter = (e) => {
+    e.preventDefault();
+    handleRegister({ username, email, password });
+    navigate("/login");
+  };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -20,19 +37,40 @@ const Register = () => {
         <div className="auth-right">
           <h2 className="form-title">Register</h2>
 
-          <form className="auth-form">
+          <form onSubmit={handleRegiter} className="auth-form">
             <div className="input-group">
-              <input type="text" name="username" placeholder=" " required />
+              <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                name="username"
+                placeholder=" "
+                required
+              />
               <label>Username</label>
             </div>
 
             <div className="input-group">
-              <input type="email" name="email" placeholder=" " required />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                name="email"
+                placeholder=" "
+                required
+              />
               <label>Email</label>
             </div>
 
             <div className="input-group">
-              <input type="password" name="password" placeholder=" " required />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                name="password"
+                placeholder=" "
+                required
+              />
               <label>Password</label>
             </div>
 
