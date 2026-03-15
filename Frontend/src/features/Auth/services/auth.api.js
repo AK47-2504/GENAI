@@ -5,6 +5,10 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Helper to extract a clean error message from the backend
+const getErrorMessage = (error) =>
+  error?.response?.data?.message || "Something went wrong. Please try again.";
+
 export async function register({ username, email, password }) {
   try {
     const response = await api.post("/api/auth/register", {
@@ -12,31 +16,27 @@ export async function register({ username, email, password }) {
       email,
       password,
     });
-
     return response.data;
   } catch (error) {
-    console.log(error);
+    throw new Error(getErrorMessage(error));
   }
 }
 
 export async function login({ email, password }) {
   try {
-    const response = await api.post("/api/auth/login", {
-      email,
-      password,
-    });
+    const response = await api.post("/api/auth/login", { email, password });
     return response.data;
   } catch (error) {
-    console.log(error);
+    throw new Error(getErrorMessage(error));
   }
 }
 
 export async function logout() {
   try {
-    const response = await api.get("/api/auth/logout");
+    const response = await api.post("/api/auth/logout");
     return response.data;
   } catch (error) {
-    console.log(error);
+    throw new Error(getErrorMessage(error));
   }
 }
 
@@ -45,6 +45,7 @@ export async function getMe() {
     const response = await api.get("/api/auth/get-me");
     return response.data;
   } catch (error) {
-    console.log(error);
+    // Silently fail on session check — user is just not logged in
+    return null;
   }
 }

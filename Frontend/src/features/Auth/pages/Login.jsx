@@ -1,22 +1,22 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "../style/auth.scss";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
-import LoadingScreen from "../../../components/LoadingScreen";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loading, handleLogin } = useAuth();
+  const { submitting, error, setError, handleLogin } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleLogin({ email, password });
+    const result = await handleLogin({ email, password });
+    if (result.success) {
+      navigate("/home");
+    }
   };
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -35,29 +35,43 @@ const Login = () => {
         <div className="auth-right">
           <h2 className="form-title">Login</h2>
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          {/* Error banner — sits right below heading, above the form */}
+          {error && (
+            <div className="auth-error" role="alert">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="auth-form" noValidate>
             <div className="input-group">
               <input
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setError(null); }}
                 type="email"
                 name="email"
+                id="login-email"
                 placeholder=" "
                 required
+                autoComplete="email"
               />
-              <label>Email</label>
+              <label htmlFor="login-email">Email</label>
             </div>
 
             <div className="input-group">
               <input
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setError(null); }}
                 type="password"
                 name="password"
+                id="login-password"
                 placeholder=" "
                 required
+                autoComplete="current-password"
               />
-              <label>Password</label>
+              <label htmlFor="login-password">Password</label>
             </div>
 
             <div className="auth-options">
@@ -65,11 +79,12 @@ const Login = () => {
                 <input type="checkbox" />
                 Remember me
               </label>
-
               <span className="forgot">Forgot password?</span>
             </div>
 
-            <button className="auth-btn">Login</button>
+            <button className="auth-btn" disabled={submitting}>
+              {submitting ? <span className="btn-spinner" /> : "Login"}
+            </button>
 
             <p className="switch-auth">
               Don't have an account?

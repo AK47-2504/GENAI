@@ -10,8 +10,6 @@ function LoadingScreen() {
           <span></span>
           <span></span>
         </div>
-
-        <p className="loader-text">Initializing AI</p>
       </div>
     </div>
   );

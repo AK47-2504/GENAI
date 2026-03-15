@@ -1,48 +1,62 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../auth.context";
 import { register, login, logout } from "../services/auth.api.js";
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  const { user, setUser, loading, setLoading } = context;
+  const { user, setUser, loading } = useContext(AuthContext);
+
+  // Per-action states — separate from global auth loading
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleRegister = async ({ username, email, password }) => {
-    setLoading(true);
+    setSubmitting(true);
+    setError(null);
     try {
       const data = await register({ username, email, password });
-      setUser(data.user);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      if (data?.data?.user) {
+        setUser(data.data.user);
+      }
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false };
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   const handleLogin = async ({ email, password }) => {
-    setLoading(true);
+    setSubmitting(true);
+    setError(null);
     try {
       const data = await login({ email, password });
-      console.log(data);
-      setUser(data.user);
-    } catch (error) {
-      console.log(error);
+      if (data?.data?.user) {
+        setUser(data.data.user);
+      }
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false };
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   const handleLogout = async () => {
-    setLoading(true);
+    setSubmitting(true);
+    setError(null);
     try {
       await logout();
       setUser(null);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      setError(err.message);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  return { user, loading, handleLogin, handleLogout, handleRegister };
+  // `loading` = global initial session-check loading (used by Protected/GuestRoute)
+  // `submitting` = per-action loading (used by Login/Register buttons)
+  return { user, loading, submitting, error, setError, handleLogin, handleLogout, handleRegister };
 };

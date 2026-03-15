@@ -1,22 +1,17 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const userModel = require("../models/userModel");
 const blacklistModel = require("../models/blackListModel");
+const AppError = require("../utils/AppError");
 
 async function authMiddleware(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(400).json({
-      message: "Token Required",
-    });
+    return next(new AppError("Token Required", 401));
   }
 
   const isTokenBlacklist = await blacklistModel.findOne({ token });
   if (isTokenBlacklist) {
-    return res.status(400).json({
-      message: "Invalid Token",
-    });
+    return next(new AppError("Invalid Token", 401));
   }
 
   try {
@@ -24,9 +19,7 @@ async function authMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(400).json({
-      message: "User not Found",
-    });
+    return next(new AppError("Unauthorized - Invalid or Expired Token", 401));
   }
 }
 

@@ -5,7 +5,7 @@ import { AuthProvider } from "./features/Auth/auth.provider.jsx";
 const App = () => {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </AuthProvider>
   );
 };
