@@ -9,7 +9,7 @@ const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
 // Same flags but without maxAge — used when clearing
@@ -18,7 +18,6 @@ const clearCookieOptions = {
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict",
 };
-
 
 /**
  * @route POST - /api/auth/register
@@ -46,7 +45,7 @@ async function registerController(req, res, next) {
       username: user.username,
     },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1H" },
   );
 
   res.cookie("token", token, cookieOptions);
@@ -83,7 +82,7 @@ async function loginController(req, res, next) {
       username: user.username,
     },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1H" },
   );
 
   res.cookie("token", token, cookieOptions);

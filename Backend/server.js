@@ -8,8 +8,16 @@ process.on("uncaughtException", (err) => {
 
 const app = require("./src/app");
 const connectToDB = require("./src/config/database");
-connectToDB();
+// const invokeGeminiAI = require("./src/services/ai.service");
+const {
+  resume,
+  jobDescription,
+  selfDescription,
+} = require("./src/services/temp");
 
+const generateInterviewReport = require("./src/services/ai.service");
+connectToDB();
+generateInterviewReport();
 const server = app.listen(3000, () => {
   console.log(`Server is Running on PORT 3000`);
 });
